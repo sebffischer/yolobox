@@ -132,9 +132,14 @@ reverts that change, the reverted config hashes back to the earlier tag. `prepar
 short-circuits on the existing image rather than rebuilding, so the live image is the older
 one, and prune keeps the abandoned newer image while deleting the live one.
 
-The consequence is a rebuild on the next run, not data loss or breakage. Fixing it
+A second case has the same shape. Two projects with identical customization produce the
+same content hash, so the second project reuses the first project's image rather than
+building its own. The image carries only the first project's label. If that project's
+directory is later removed, prune deletes an image the second project still uses.
+
+Both consequences are a rebuild on the next run, not data loss or breakage. Fixing either
 correctly requires tracking last-used time in a state file outside the image, which is not
-worth the added state management and staleness handling for this case.
+worth the added state management and staleness handling for these cases.
 
 ## Documentation
 
